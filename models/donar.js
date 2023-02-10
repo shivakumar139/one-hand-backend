@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { APP_URL } from "../config";
 const {Schema}  = mongoose;
 
 const donarSchema = new Schema({
