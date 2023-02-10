@@ -135,7 +135,7 @@ const DonarController = {
 
             const donarSchema = Joi.object({
                 donationType: Joi.string().required(),
-                bloodType: Joi.string(),
+                bloodType: Joi.string().min(0),
                 state: Joi.string().required(),
                 city: Joi.string().required()
             });
@@ -172,17 +172,6 @@ const DonarController = {
                 
             } else{
 
-                const donarSchema = Joi.object({
-                    donationType: Joi.string().required(),
-                    state: Joi.string().required(),
-                    city: Joi.string().required()
-                });
-
-                const {error} = await donarSchema.validateAsync(req.body)
-
-                if(error){
-                    return next(error)
-                }
 
                 const {city, donationType} = req.body;
                 try{
