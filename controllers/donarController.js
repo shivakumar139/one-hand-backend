@@ -1,20 +1,6 @@
-import multer from "multer";
-import path from "path";
 import { Donar } from "../models";
-import CustomErrorHandler from "../services/CustomErrorHandler"
 import Joi from "joi";
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
-      cb(null, file.fieldname + '-' + uniqueSuffix)
-    }
-})
-
-const upload = multer({ storage: storage }).single("image");
 
 
 const DonarController = {
@@ -25,20 +11,22 @@ const DonarController = {
 
         try{
 
-            // const donarSchema = Joi.object({
-            //     fullName: Joi.string().required(),
-            //     phoneNo: Joi.string().required(),
-            //     donationType: Joi.string().required(),
-            //     bloodType: Joi.string(),
-            //     state: Joi.string().required(),
-            //     city: Joi.string().required()
-            // });
+            const donarSchema = Joi.object({
+                fullName: Joi.string().required(),
+                phoneNo: Joi.string().required(),
+                donationType: Joi.string().required(),
+                bloodType: Joi.string(),
+                state: Joi.string().required(),
+                city: Joi.string().required()
+            });
     
-            // const {error} = await donarSchema.validateAsync(req.body)
+            const {error} = await donarSchema.validateAsync(req.body)
     
-            // if(error){
-            //     return next(error)
-            // }
+            if(error){
+                return next(error)
+            }
+            
+
 
             if(req.body.donationType === "blood" || req.body.donationType === "Blood"){
 
@@ -82,28 +70,13 @@ const DonarController = {
                 }
                 
             } else{
-                
-                
-                upload(req, res, async (err) =>{
-                    
-                    if(err){
-                        return next();
-                    }
-                   
-        
-                    if(!req.file){
-                        return next(CustomErrorHandler.imageIsMissing())
-                    }
-
-                    const filePath = req.file.path;
-                    const donarSchema = Joi.object({
+                const donarSchema = Joi.object({
                         fullName: Joi.string().required(),
                         phoneNo: Joi.string().required(),
                         donationType: Joi.string().required(),
                         state: Joi.string().required(),
                         city: Joi.string().required()
                     });
-                    console.log(filePath)
 
                     const {error} = await donarSchema.validateAsync(req.body)
 
@@ -121,7 +94,6 @@ const DonarController = {
                         donationType,
                         state,
                         city,
-                        image: filePath
                     })
 
                     try{
@@ -131,8 +103,6 @@ const DonarController = {
                     } catch(err){
                         return next(err)
                     }
-             
-                });
             }
 
         } catch(err){
@@ -187,7 +157,6 @@ const DonarController = {
 
                 const donarSchema = Joi.object({
                     donationType: Joi.string().required(),
-                    bloodType: Joi.string(),
                     state: Joi.string().required(),
                     city: Joi.string().required()
                 });

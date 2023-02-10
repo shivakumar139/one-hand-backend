@@ -8,13 +8,7 @@ const donarSchema = new Schema({
     donationType: {type: String, required: true, lowercase: true, trim: true},
     bloodType: {type: String, trim: true},
     state: {type: String, required: true, lowercase: true, trim: true},
-    city: {type: String, required: true, lowercase: true, trim: true},
-    image: {type: String, get: (image)=>{
-        if(image){
-            return `${APP_URL}/${image}`;
-        }
-        
-    }}
+    city: {type: String, required: true, lowercase: true, trim: true}
 
 }, {timestamps: true, toJSON: {getters: true}} );
 
