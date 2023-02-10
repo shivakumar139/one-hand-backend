@@ -103,6 +103,7 @@ const DonarController = {
                         state: Joi.string().required(),
                         city: Joi.string().required()
                     });
+                    console.log(filePath)
 
                     const {error} = await donarSchema.validateAsync(req.body)
 
